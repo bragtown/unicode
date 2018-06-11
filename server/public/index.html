@@ -1,0 +1,51 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Hello World!</h1>
+        <button id = "gamesearch" disabled>Game Search</button>
+
+        <textarea id = "control" disabled></textarea>
+        <button id = "action" disabled>action!</button>
+        <div id = "board"></div>
+        
+    </body>
+        
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    let searchBtn = document.getElementById("gamesearch");
+    let control = document.getElementById("control");
+    let action = document.getElementById("action");
+    let board = document.getElementById("board");
+    var socket = io();
+    socket.on('connect', ()=>{
+        socket.emit('gamesearch', 'myinfo')
+    })
+    socket.on('confirmconnect', function(msg){
+        console.log('iotest', msg);
+        searchBtn.disabled = false;
+        action.disabled = false;
+        control.disabled = false;
+        searchBtn.addEventListener("click", gamesearch);
+        action.addEventListener("click", doAction);
+        control.value = `{
+            "actorChain":[],
+            "action":"changeTurn",
+            "targetChain":[],
+            "actionParams":[],
+            "playerId":0
+        }`
+    })
+    socket.on('gameboard', function(msg){
+        console.log(msg)
+        board.innerHTML = msg.replace(/\n/g, "<br>");
+    })
+    let gamesearch = function(){
+        console.log("searching");
+        socket.emit('gamesearch', 'myinfo')
+    }
+    let doAction = function(){
+        socket.emit("action", control.value);
+    }
+    </script>
+</html>
