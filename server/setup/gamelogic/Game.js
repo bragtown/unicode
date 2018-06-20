@@ -7,34 +7,6 @@ module.exports = class Game {
         this.activePlayer;
         this.startTurn(p1);
     }
-    startTurn(player){
-        player.turn = true;
-        player.draw(1);
-        player.mana++
-        player.manaLeft = player.mana;
-        this.activePlayer = player;
-        // console.log(player.hand)
-    }
-    endTurn(player){
-        player.turn = false;
-        player.board.cards.forEach(minion=>{
-            minion.endTurnActions();
-        })
-    }
-    changeTurn(params, target, returnObj){
-        returnObj.msg += ("Changing turns!\n")
-        if(this.p1.turn){
-            returnObj.msg += ("Ending turn for player 1\n")
-            this.endTurn(this.p1)
-            this.startTurn(this.p2)
-        }
-        else{
-            returnObj.msg += ("Ending turn for player 2\n")
-            this.endTurn(this.p2)
-            this.startTurn(this.p1);
-        }
-        return true;    
-    }
     getTargets(hero, minion, board, opponent, self, card){
         let returnable = []
         returnable[this.p1.playerId] = {hero:false, minions:[], board:false}
@@ -59,16 +31,7 @@ module.exports = class Game {
         return returnable;
         
 
-    }
-    releaseTargets(){
-        this.p1.releaseTargets();
-        this.p2.releaseTargets();
-        return true;
-    }
-    destroyMinions(){
-        this.p1.destroyMinions();
-        this.p2.destroyMinions();
-    }
+    }   
     doAction(params){
         let returnObj = {msg:""}
         // console.log("Recieving action..." + params.action);
