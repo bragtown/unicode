@@ -51,7 +51,7 @@ module.exports = class Game {
                 })
             }
             if(!breakAction) {
-                returnObj.result = actor[params.action](params.actionParams, target, returnObj)
+                result = actions[params.action](actor, params.actionParams, target);
                 if(returnObj.minionsDestroyed) this.destroyMinions()
             }
             else returnObj.result = false;
